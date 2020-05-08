@@ -2,16 +2,14 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: airflow-eks
+  name: airflow-cluster
   region: eu-west-3
   version: "1.16"
-  tags:
-    environment: prod
 
 managedNodeGroups:
   - name: workers
     instanceType: t3.micro
-    #privateNetworking: true
+    privateNetworking: true
     minSize: 1
     maxSize: 3
     desiredCapacity: 3

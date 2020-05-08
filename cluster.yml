@@ -1,0 +1,31 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: airflow-eks
+  region: eu-west-3
+  version: "1.16"
+  tags:
+    environment: prod
+
+managedNodeGroups:
+  - name: workers
+    instanceType: t3.micro
+    #privateNetworking: true
+    minSize: 1
+    maxSize: 3
+    desiredCapacity: 3
+    volumeSize: 20
+    ssh:
+      allow: true
+      publicKeyName: airflow-workstation
+    labels: { role: worker }
+    tags:
+      nodegroup-role: worker
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+        efs: true
+        albIngress: true
+        autoScaler: true
+        cloudWatch: true

@@ -1,0 +1,28 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: airflow
+  namespace: airflow-dev
+  annotations:
+    flux.weave.works/automated: "true"
+spec:
+  releaseName: airflow
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: airflow
+    version: 6.9.4
+  values:
+    airflow:
+        executor: Kubernetes
+        image:
+            repository: 953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-dev
+            tag: 90bc3f07
+    flower:
+        enabled: false
+    workers:
+        enabled: false
+    redis:
+        enabled: false
+    postgresql:
+        persistence:
+            enabled: false

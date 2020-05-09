@@ -8,7 +8,7 @@ metadata:
 
 managedNodeGroups:
   - name: workers
-    instanceType: t3.micro
+    instanceType: m5.large
     privateNetworking: true
     minSize: 1
     maxSize: 3

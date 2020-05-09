@@ -2,7 +2,7 @@ apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: airflow
-  namespace: airflow-dev
+  namespace: dev
   annotations:
     flux.weave.works/automated: "true"
 spec:

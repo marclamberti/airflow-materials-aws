@@ -8,7 +8,7 @@ metadata:
 spec:
   releaseName: airflow
   chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://marclamberti.github.io/airflow-eks-helm-chart
     name: airflow
     version: 6.9.4
   values:

@@ -6,7 +6,7 @@ metadata:
   annotations:
     flux.weave.works/automated: "true"
 spec:
-  releaseName: airflow
+  releaseName: airflow-dev
   chart:
     repository: https://marclamberti.github.io/airflow-eks-helm-chart
     name: airflow

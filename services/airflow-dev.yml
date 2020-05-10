@@ -6,13 +6,13 @@ metadata:
   labels:
     app: airflow
     component: web
-    release: airflow
+    release: airflow-dev
   annotations:
 spec:
   selector:
     app: airflow
     component: web
-    release: airflow
+    release: airflow-dev
     namespace: dev
   ports:
     - protocol: TCP

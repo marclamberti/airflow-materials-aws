@@ -13,6 +13,9 @@ spec:
     version: 6.9.4
   values:
     airflow:
+        extraEnv:
+            - name: AIRFLOW__KUBERNETES__DAGS_IN_IMAGE
+              value: True
         executor: Kubernetes
         image:
             repository: 953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-dev

@@ -13,9 +13,9 @@ spec:
     app: airflow
     component: web
     release: airflow-dev
-    namespace: dev
   ports:
-    - protocol: TCP
+    - name: web
+      protocol: TCP
       port: 8080
       targetPort: 8080
   type: LoadBalancer

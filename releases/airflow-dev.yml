@@ -13,6 +13,7 @@ spec:
     version: 6.9.4
   values:
     airflow:
+        fernetKey: "zTxhk7FuGqQVPZVoukLn5bGWOrgHzhQnBnaqAItcZGI="
         extraEnv:
             - name: AIRFLOW__KUBERNETES__DAGS_IN_IMAGE
               value: "True"

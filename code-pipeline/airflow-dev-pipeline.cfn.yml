@@ -62,7 +62,7 @@ Resources:
     Type: AWS::ECR::Repository
     DeletionPolicy: Retain
     Properties:
-      RepositoryName: !Ref GitSourceRepo
+      RepositoryName: Fn::Join: [ "-", [!Ref GitSourceRepo, !Ref GitBranch] ]
 
   CodeBuildProject:
     Type: AWS::CodeBuild::Project

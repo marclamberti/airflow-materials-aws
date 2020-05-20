@@ -115,11 +115,6 @@ Resources:
                 - echo "Logging into Amazon ECR..."
                 - $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
                 - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
-                - echo "Installing kubectl"
-                - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/linux/amd64/kubectl
-                - chmod +x ./kubectl
-                - mv ./kubectl /usr/local/bin/kubectl
-                - export KUBECONFIG=$HOME/.kube/config
             build:
               commands:
                 - echo Build started on `date`
@@ -128,13 +123,7 @@ Resources:
             post_build:
               commands:
                 - echo Build completed on `date`
-                  #                - CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
-                  #                - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
-                  #                - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
-                  #                - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
-                  #                - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
                 - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
-                - kubectl get nodes
                 - echo "Pushing Docker image to ECR"
                 - docker push "${REPOSITORY_URI}:latest"
                 - docker push "${REPOSITORY_URI}:${TAG}"

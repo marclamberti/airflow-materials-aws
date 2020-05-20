@@ -47,6 +47,14 @@
         "ecr:CompleteLayerUpload"
       ],
       "Resource": "*"
-    }
+    },
+    {
+        "Sid": "EKSAccessPolicy",
+        "Effect": "Allow",
+        "Action": [
+          "eks:Describe*"
+        ],
+        "Resource": "*"
+      }
   ]
 }

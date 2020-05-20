@@ -20,12 +20,12 @@ spec:
             - name: AIRFLOW__KUBERNETES__NAMESPACE
               value: "dev"
             - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY
-              value: "953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker"
+              value: "953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker-dev"
             - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG
               value: "90bc3f07"
         executor: Kubernetes
         image:
-            repository: 953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker
+            repository: 953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker-dev
             tag: 90bc3f07
     flower:
         enabled: false

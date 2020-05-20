@@ -88,6 +88,13 @@ Resources:
                 - echo "Logging into Amazon ECR..."
                 - $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
                 - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+                - echo "Installing kubectl"
+                - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/linux/amd64/kubectl
+                - chmod +x ./kubectl
+                - mv ./kubectl /usr/local/bin/kubectl
+                - export KUBECONFIG=$HOME/.kube/config
+                - curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+                - helm repo add airflow-eks-helm-chart https://marclamberti.github.io/airflow-eks-helm-chart
             build:
               commands:
                 - echo Build started on `date`

@@ -10,20 +10,16 @@ spec:
   chart:
     repository: https://marclamberti.github.io/airflow-eks-helm-chart
     name: airflow
-    version: 6.10.4
+    version: 7.0.1
   values:
     airflow:
         fernetKey: "zTxhk7FuGqQVPZVoukLn5bGWOrgHzhQnBnaqAItcZGI="
-        extraEnv:
-            - name: AIRFLOW__KUBERNETES__DAGS_IN_IMAGE
-              value: "True"
-            - name: AIRFLOW__KUBERNETES__NAMESPACE
-              value: "dev"
-            - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY
-              value: "953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker-dev"
-            - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG
-              value: "90bc3f07"
-        executor: Kubernetes
+        config:
+            AIRFLOW__KUBERNETES__DAGS_IN_IMAGE: "True"
+            AIRFLOW__KUBERNETES__NAMESPACE: "dev"
+            AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY: "953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker-dev"
+            AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG: "90bc3f07"
+        executor: KubernetesExecutor
         image:
             repository: 953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker-dev
             tag: 90bc3f07

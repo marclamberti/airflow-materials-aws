@@ -23,12 +23,3 @@ spec:
         image:
             repository: 953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker-dev
             tag: 90bc3f07
-    flower:
-        enabled: false
-    workers:
-        enabled: false
-    redis:
-        enabled: false
-    postgresql:
-        persistence:
-            enabled: true

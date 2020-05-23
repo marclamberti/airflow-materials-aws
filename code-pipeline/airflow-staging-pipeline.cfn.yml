@@ -158,7 +158,7 @@ Resources:
       RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/AirflowCodePipelineServiceRole
       ArtifactStore:
         Type: S3
-        Location: !Sub airflow-dev-codepipeline-artifacts
+        Location: !Sub airflow-staging-codepipeline-artifacts
       Stages:
         - Name: Source
           Actions:

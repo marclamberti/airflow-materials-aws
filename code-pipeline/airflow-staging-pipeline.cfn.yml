@@ -126,15 +126,12 @@ Resources:
             build:
               commands:
                 - echo Build started on `date`
-                - docker build -t "${REPOSITORY_URI}:test" .
-                - echo "Pushing Docker image test to ECR"
-                - docker push "${REPOSITORY_URI}:test"
+                - docker build -t "${REPOSITORY_URI}:latest" .
+                - docker tag "${REPOSITORY_URI}:latest" "${REPOSITORY_URI}:${TAG}"
             post_build:
               commands:
                 - echo Build completed on `date`
                 - echo "Pushing Docker image to ECR"
-                - docker tag "${REPOSITORY_URI}:test" "${REPOSITORY_URI}:latest"
-                - docker tag "${REPOSITORY_URI}:test" "${REPOSITORY_URI}:${TAG}"
                 - docker push "${REPOSITORY_URI}:latest"
                 - docker push "${REPOSITORY_URI}:${TAG}"
                 - printf '{"Tag":"%s","RepositoryUri":"%s"}' $TAG $REPOSITORY_URI $PROJECT_NAME $ARTIFACT_BUCKET > build.json

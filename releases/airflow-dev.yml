@@ -10,7 +10,7 @@ spec:
   chart:
     repository: https://marclamberti.github.io/airflow-eks-helm-chart
     name: airflow
-    version: 7.0.1
+    version: 7.1.0
   values:
     airflow:
         fernetKey: "zTxhk7FuGqQVPZVoukLn5bGWOrgHzhQnBnaqAItcZGI="

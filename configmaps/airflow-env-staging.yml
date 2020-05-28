@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: airflow-env-staging
+    namespace: staging
+data:
+    # put the environment variables here
+    # AIRFLOW__SECTION__MY_VAR = value

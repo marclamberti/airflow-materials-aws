@@ -68,7 +68,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: efs-provisioner
-  namespace: storage
+  namespace: dev
 spec:
   replicas: 1
   selector:
@@ -121,7 +121,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: efs-provisioner-config
-  namespace: storage
+  namespace: dev
 data:
   file.system.id: YOUR_FILE_SYSTEM_ID
   aws.region: YOUR_FILE_SYSTEM_REGION

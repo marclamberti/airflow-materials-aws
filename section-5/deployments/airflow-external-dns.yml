@@ -7,6 +7,7 @@ metadata:
   annotations:
     # Substitute your account ID and IAM service role name below.
     eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT-ID:role/IAM-SERVICE-ROLE-NAME
+  namespace: kube-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
@@ -40,6 +41,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: external-dns
+  namespace: kube-system
 spec:
   strategy:
     type: Recreate

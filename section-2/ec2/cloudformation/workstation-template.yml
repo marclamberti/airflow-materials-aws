@@ -1,0 +1,20 @@
+Parameters:
+    # whatever you consider a changing value, put it as a parameter instead of hard-coding it into your script
+    Resources:
+      #instace profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
+      ProfileWithRolesForOurApp:
+        Type: AWS::IAM::InstanceProfile
+        Properties: 
+          Roles:
+            - UdacityS3ReadOnlyEC2
+      
+              #!/bin/bash
+              apt-get update -y
+              apt-get install unzip awscli -y
+              apt-get install apache2 -y
+              systemctl start apache2.service
+              cd /var/www/html
+              aws s3 cp s3://udacity-demo-1/udacity.zip .
+              unzip -o udacity.zip
+      Outputs: 
+      #Bonus points for useful outputs!

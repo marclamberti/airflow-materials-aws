@@ -20,7 +20,7 @@ Resources:
       Type: AWS::Cloud9::EnvironmentEC2
       Properties:
         Repositories:
-        - RepositoryUrl: https://github.com/marclamberti/airflow-materials-aws.git
+        - RepositoryUrl: https://github.com/puckel/docker-airflow.git
           PathComponent: /airflow-materials-aws
         Description: Airflow workstation
         AutomaticStopTimeMinutes:

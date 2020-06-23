@@ -19,9 +19,6 @@ Resources:
     IDE:
       Type: AWS::Cloud9::EnvironmentEC2
       Properties:
-        Repositories:
-        - RepositoryUrl: https://github.com/stelligent/mu-cloud9.git
-          PathComponent: github.com/stelligent/mu-cloud9
         Description: Airflow workstation
         AutomaticStopTimeMinutes:
           Ref: AutoHibernateTimeout

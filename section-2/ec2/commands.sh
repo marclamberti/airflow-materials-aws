@@ -3,15 +3,8 @@
 # Update packages of the instance
 sudo yum -y update
 
-# Install git
-sudo yum -y install git
-
-# Install Python 3
-sudo yum -y install python3
-python3 -V
-
 # Create a python virtual environment
-python3 -m venv .sandbox
+python -m venv .sandbox
 
 # Active the python virtual environment
 source .sandbox/bin/activate
@@ -50,9 +43,7 @@ helm version --short
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 
 # Add bash completion for helm
-helm completion bash >> ~/.bash_completion
-. /etc/profile.d/bash_completion.sh
-. ~/.bash_completion
+sudo yum install -y bash-completion
 source <(helm completion bash)
 
 # Config git

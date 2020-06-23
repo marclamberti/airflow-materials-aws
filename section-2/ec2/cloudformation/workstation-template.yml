@@ -15,22 +15,15 @@ Parameters:
       Description: How many minutes idle before shutting down the IDE
       Type: Number
 
-    SubnetIdentifier:
-      Description: SubnetId
-      Type: AWS::EC2::Subnet::Id
-
 Resources:
     IDE:
       Type: AWS::Cloud9::EnvironmentEC2
       Properties:
         Repositories:
-        - RepositoryUrl: https://github.com/stelligent/mu-cloud9.git
-          PathComponent: github.com/stelligent/mu-cloud9
-        Description: Cloud9 IDE
+        - RepositoryUrl: https://github.com/marclamberti/airflow-materials-aws.git
+        Description: Airflow workstation
         AutomaticStopTimeMinutes:
           Ref: AutoHibernateTimeout
-        SubnetId:
-          Ref: SubnetIdentifier
         InstanceType:
           Ref: EC2InstanceType
         Name:

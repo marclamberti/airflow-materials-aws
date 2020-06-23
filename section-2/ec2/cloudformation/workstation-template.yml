@@ -21,6 +21,7 @@ Resources:
       Properties:
         Repositories:
         - RepositoryUrl: https://github.com/marclamberti/airflow-materials-aws.git
+          PathComponent: /airflow-materials-aws
         Description: Airflow workstation
         AutomaticStopTimeMinutes:
           Ref: AutoHibernateTimeout

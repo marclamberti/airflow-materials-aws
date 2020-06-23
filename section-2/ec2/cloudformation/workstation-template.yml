@@ -20,8 +20,8 @@ Resources:
       Type: AWS::Cloud9::EnvironmentEC2
       Properties:
         Repositories:
-        - RepositoryUrl: https://github.com/puckel/docker-airflow.git
-          PathComponent: /airflow-materials-aws
+        - RepositoryUrl: https://github.com/stelligent/mu-cloud9.git
+          PathComponent: github.com/stelligent/mu-cloud9
         Description: Airflow workstation
         AutomaticStopTimeMinutes:
           Ref: AutoHibernateTimeout

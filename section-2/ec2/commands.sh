@@ -19,18 +19,6 @@ source .sandbox/bin/activate
 # Upgrade pip
 pip install --upgrade pip
 
-# Download AWS CLI v2
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-
-# Unzip
-unzip awscliv2.zip
-
-# Install
-sudo ./aws/install
-
-# Check that the version is aws at least >2
-aws --version
-
 # Download and extract the latest release of eksctl with the following command.
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/0.21.0-rc.0/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 
@@ -52,10 +40,6 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 # Test to ensure the version you installed is up-to-date:
 kubectl version --client
 
-# Configure aws
-aws configure
-# enter you AWS ACCESS KEY ID/ SECRET ID/ Region / json
-
 # Install Helm3
 curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
@@ -72,5 +56,5 @@ helm completion bash >> ~/.bash_completion
 source <(helm completion bash)
 
 # Config git
-git config --global --edit
+git config --global user.name "airflow-workstation"
 # change the name by airflow-workstation and keep the email. Save and exit the file.

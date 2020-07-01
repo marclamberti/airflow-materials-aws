@@ -1,0 +1,26 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: airflow
+  namespace: dev
+  annotations:
+    flux.weave.works/automated: "true"
+spec:
+  releaseName: airflow-dev
+  chart:
+    repository: https://marclamberti.github.io/airflow-eks-helm-chart
+    name: airflow
+    version: 7.1.0
+  values:
+    airflow:
+        fernetKey: "zTxhk7FuGqQVPZVoukLn5bGWOrgHzhQnBnaqAItcZGI="
+        config:
+            AIRFLOW__KUBERNETES__DAGS_IN_IMAGE: "True"
+            AIRFLOW__KUBERNETES__NAMESPACE: "dev"
+            AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY: "953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker-dev"
+            AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG: "90bc3f07"
+            AIRFLOW__KUBERNETES__RUN_AS_USER: "50000"
+        executor: KubernetesExecutor
+        image:
+            repository: 953076219999.dkr.ecr.eu-west-3.amazonaws.com/airflow-eks-docker-dev
+            tag: 90bc3f07

@@ -31,14 +31,6 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 # Test to ensure the version you installed is up-to-date:
 kubectl version --client
 
-# Add autocompletion
-sudo yum install -y bash-completion
-echo 'source <(kubectl completion bash)' >>~/.bashrc
-sudo su
-kubectl completion bash >/etc/bash_completion.d/kubectl
-# control-D
-source ~/.bashrc
-
 # Install Helm3
 curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
@@ -47,13 +39,6 @@ helm version --short
 
 # Download the stable repo
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-
-# Add bash completion for helm
-echo 'source <(helm completion bash)' >>~/.bashrc
-sudo su
-helm completion bash >/etc/bash_completion.d/helm
-# control-D
-source ~/.bashrc
 
 # Config git
 git config --global user.name "airflow-workstation"

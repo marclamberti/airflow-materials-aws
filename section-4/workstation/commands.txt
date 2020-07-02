@@ -64,12 +64,9 @@ git config --global user.name "airflow-workstation"
 # Press return for all questions by keeping the defaults and empty passphrase.
 ssh-keygen -t rsa
 
-# Stand up the cluster
-git clone https://github.com/marclamberti/airflow-materials-aws
-
 cd airflow-materials-aws
 
-# Need to configure the region
+# Create the cluster
 eksctl create cluster -f cluster.yml
 
 # Check if the cluster is healthy

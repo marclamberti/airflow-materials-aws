@@ -49,6 +49,28 @@ git config --global user.name "airflow-workstation"
 # Press return for all questions by keeping the defaults and empty passphrase.
 ssh-keygen -t rsa
 
+################################# EOV
+
+# go the settings, AWS settings and turn off temporary credentials
+
+# remove temporary credentials
+rm -vf ${HOME}/.aws/credentials
+
+# configure aws env variables
+aws sts get-caller-identity
+export export ACCOUNT_ID=
+export export AWS_REGION=
+
+# update the file bash_profile and configure aws
+echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile
+echo "export AWS_REGION=${AWS_REGION}" | tee -a ~/.bash_profile
+aws configure set default.region ${AWS_REGION}
+aws configure get default.region
+
+
+
+################################# EOV
+
 cd airflow-materials-aws
 
 # Create the cluster

@@ -47,7 +47,7 @@ git config --global user.name "airflow-workstation"
 ################################# EOV
 
 # upgrade aws cli
-sudo pip install --upgrade awscli && hash -r
+pip install --upgrade awscli && hash -r
 
 # install some utilities
 sudo yum -y install jq gettext bash-completion moreutils

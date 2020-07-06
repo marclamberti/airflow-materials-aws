@@ -51,12 +51,19 @@ ssh-keygen -t rsa
 
 ################################# EOV
 
+# upgrade aws cli
+sudo pip install --upgrade awscli && hash -r
+
+# install some utilities
+sudo yum -y install jq gettext bash-completion moreutils
+
 # go the settings, AWS settings and turn off temporary credentials
 
 # remove temporary credentials
 rm -vf ${HOME}/.aws/credentials
 
 # configure aws env variables
+# The following get-caller-identity example displays information about the IAM identity used to authenticate the request
 aws sts get-caller-identity
 export export ACCOUNT_ID=
 export export AWS_REGION=
@@ -66,8 +73,6 @@ echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile
 echo "export AWS_REGION=${AWS_REGION}" | tee -a ~/.bash_profile
 aws configure set default.region ${AWS_REGION}
 aws configure get default.region
-
-
 
 ################################# EOV
 

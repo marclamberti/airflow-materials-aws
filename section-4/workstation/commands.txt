@@ -46,11 +46,6 @@ git config --global user.name "airflow-workstation"
 
 ################################# EOV
 
-# Press return for all questions by keeping the defaults and empty passphrase.
-ssh-keygen -t rsa
-
-################################# EOV
-
 # upgrade aws cli
 sudo pip install --upgrade awscli && hash -r
 
@@ -73,6 +68,11 @@ echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile
 echo "export AWS_REGION=${AWS_REGION}" | tee -a ~/.bash_profile
 aws configure set default.region ${AWS_REGION}
 aws configure get default.region
+
+################################# EOV
+
+# Press return for all questions by keeping the defaults and empty passphrase.
+ssh-keygen -t rsa
 
 ################################# EOV
 

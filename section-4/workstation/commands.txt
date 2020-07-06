@@ -59,9 +59,10 @@ rm -vf ${HOME}/.aws/credentials
 
 # configure aws env variables
 # The following get-caller-identity example displays information about the IAM identity used to authenticate the request
+aws configure
 aws sts get-caller-identity
-export export ACCOUNT_ID=
-export export AWS_REGION=
+export ACCOUNT_ID=
+export AWS_REGION=
 
 # update the file bash_profile and configure aws
 echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile

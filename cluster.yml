@@ -11,8 +11,8 @@ managedNodeGroups:
     instanceType: t3.medium
     privateNetworking: true
     minSize: 1
-    maxSize: 2
-    desiredCapacity: 2
+    maxSize: 3
+    desiredCapacity: 3
     volumeSize: 20
     ssh:
       allow: true

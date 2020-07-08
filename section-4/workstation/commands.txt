@@ -86,6 +86,8 @@ eksctl create cluster -f cluster.yml
 kubectl get nodes
 kubectl get pods --all-namespaces
 
+################################# EOV
+
 # Installing Flux
 # create the flux Kubernetes namespace
 kubectl create namespace flux

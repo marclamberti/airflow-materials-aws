@@ -1,0 +1,16 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: airflow
+  namespace: dev
+  annotations:
+    flux.weave.works/automated: "true"
+spec:
+  releaseName: airflow-dev
+  chart:
+    repository: https://marclamberti.github.io/airflow-eks-helm-chart
+    name: airflow
+    version: 1.0.0
+  values:
+    fernetKey: "zTxhk7FuGqQVPZVoukLn5bGWOrgHzhQnBnaqAItcZGI="
+    # Put your values here

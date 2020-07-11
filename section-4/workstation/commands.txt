@@ -86,6 +86,8 @@ eksctl create cluster -f cluster.yml
 kubectl get nodes
 kubectl get pods --all-namespaces
 
+################################# EOV
+
 # Installing Flux
 # create the flux Kubernetes namespace
 kubectl create namespace flux
@@ -113,3 +115,10 @@ sudo chmod 755 /usr/local/bin/fluxctl
 
 fluxctl version
 fluxctl identity --k8s-fwd-ns flux
+
+mkdir airflow-eks-config/{workloads,releases,namespaces}
+find airflow-eks-config/ -type d -exec touch {}/.keep \;
+cd airflow-eks-config
+git add .
+git commit -am "directory structure"
+git push

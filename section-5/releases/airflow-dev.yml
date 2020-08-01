@@ -13,4 +13,12 @@ spec:
     version: 1.0.0
   values:
     fernetKey: "zTxhk7FuGqQVPZVoukLn5bGWOrgHzhQnBnaqAItcZGI="
-    # Put your values here
+    env:
+      AIRFLOW__KUBERNETES__DAGS_IN_IMAGE: "True"
+      AIRFLOW__KUBERNETES__NAMESPACE: "dev"
+      AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY: "apache/airflow"
+      AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG: "1.10.10.1-alpha2-python3.7"
+      AIRFLOW__KUBERNETES__RUN_AS_USER: "50000"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    executor: "KubernetesExecutor"
+    

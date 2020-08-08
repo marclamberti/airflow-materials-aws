@@ -93,6 +93,7 @@ Resources:
                 - echo Build started on `date`
                 - docker build -t "${REPOSITORY_URI}:latest" .
                 - docker tag "${REPOSITORY_URI}:latest" "${REPOSITORY_URI}:${TAG}"
+                - docker run --rm "${REPOSITORY_URI}:latest" bash -c "airflow initdb && pytest unittests"
             post_build:
               commands:
                 - echo Build completed on `date`

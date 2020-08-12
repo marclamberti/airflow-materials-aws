@@ -17,8 +17,8 @@ aws cloudformation delete-stack --stack-name=airflow-dev-pipeline
 aws cloudformation delete-stack --stack-name=airflow-staging-pipeline
 
 # ECR
-aws ecr delete-repository --repository-name=airflow-eks-docker-dev
-aws ecr delete-repository --repository-name=airflow-eks-docker-staging
+aws ecr delete-repository --force --repository-name=airflow-eks-docker-dev
+aws ecr delete-repository --force --repository-name=airflow-eks-docker-staging
 
 # EKS
 # This can take up to 15 minutes

@@ -1,0 +1,200 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: CFN Template to deploy CodePipeline to build Docker Image and push to ECR
+
+Parameters:
+  EksClusterName:
+    Type: String
+    Description: The name of the EKS cluster created
+    Default: eks-cluster
+    MinLength: 1
+    MaxLength: 100
+    ConstraintDescription: You must enter the EKS cluster name
+
+  KubectlRoleName:
+    Type: String
+    Default: AirflowCodeBuildServiceRole
+    Description: IAM role used by kubectl to interact with EKS cluster
+    MinLength: 3
+    MaxLength: 100
+    ConstraintDescription: You must enter a kubectl IAM role
+
+  GitSourceRepo:
+    Type: String
+    Description: GitHub source repository - must contain a Dockerfile in the base
+    Default: eks-example
+    MinLength: 1
+    MaxLength: 100
+    ConstraintDescription: You must enter a GitHub repository name
+
+  GitBranch:
+    Type: String
+    Default: master
+    Description: GitHub git repository branch - change triggers a new build
+    MinLength: 1
+    MaxLength: 100
+    ConstraintDescription: You must enter a GitHub repository branch name
+
+  GitHubToken:
+    Type: String
+    NoEcho: true
+    Description: GitHub API token from https://github.com/settings/tokens
+    MinLength: 3
+    MaxLength: 100
+    ConstraintDescription: You must enter a GitHub personal access token
+
+  GitHubUser:
+    Type: String
+    Description: GitHub username or organization
+    MinLength: 3
+    MaxLength: 100
+    ConstraintDescription: You must enter a GitHub username or organization
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: GitHub
+        Parameters:
+          - GitHubUser
+          - GitHubToken
+          - GitSourceRepo
+          - GitBranch
+      - Label:
+          default: IAM
+        Parameters:
+          - KubectlRoleName
+      - Label:
+          default: EKS
+        Parameters:
+          - EksClusterName
+    ParameterLabels:
+      GitHubUser:
+        default: Username
+      GitHubToken:
+        default: Access token
+      GitSourceRepo:
+        default: Repository
+      GitBranch:
+        default: Branch
+      KubectlRoleName:
+        default: kubectl IAM role
+      EksClusterName:
+        default: EKS cluster name
+
+Resources:
+
+  EcrDockerRepository:
+    Type: AWS::ECR::Repository
+    DeletionPolicy: Retain
+    Properties:
+      RepositoryName: !Join [ "-", [ !Ref GitSourceRepo, !Ref GitBranch ] ]
+
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: |
+          version: 0.2
+          phases:
+            install:
+              runtime-versions:
+                docker: 18
+              commands:
+                - apt-get -y update
+                - apt-get -y install jq
+            pre_build:
+              commands:
+                - echo "Starting docker daemon..."
+                - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
+                - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+                - echo "Logging into Amazon ECR..."
+                - $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
+                - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+                - echo "Installing kubectl"
+                - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/linux/amd64/kubectl
+                - chmod +x ./kubectl
+                - mv ./kubectl /usr/local/bin/kubectl
+                - export KUBECONFIG=$HOME/.kube/config
+                - curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+                - helm repo add airflow-eks-helm-chart https://marclamberti.github.io/airflow-eks-helm-chart
+                - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
+            build:
+              commands:
+                - echo Build started on `date`
+                - docker build -t "${REPOSITORY_URI}:latest" .
+                - docker tag "${REPOSITORY_URI}:latest" "${REPOSITORY_URI}:${TAG}"
+                - echo "Testing..."
+                - helm upgrade --install --recreate-pods --wait --timeout 600s --namespace "staging" --set ingress.enabled=true --set ingress.web.path="airflow-staging" --set images.airflow.repository=${REPOSITORY_URI} --set images.airflow.tag=${TAG} --set executor="KubernetesExecutor" --set env[0].name="AIRFLOW__KUBERNETES__DAGS_IN_IMAGE" --set env[0].value="True" --set env[1].name="AIRFLOW__KUBERNETES__NAMESPACE" --set env[1].value="staging" --set env[2].name="AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY" --set env[2].value=${REPOSITORY_URI} --set env[3].name="AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG" --set env[3].value=${TAG} --set env[4].name="AIRFLOW__KUBERNETES__RUN_AS_USER" --set env[4].value="50000" --set env[5].name="AIRFLOW__API__AUTH_BACKEND" --set env[5].value="airflow.api.auth.backend.default" --set env[6].name="AIRFLOW__WEBSERVER__BASE_URL" --set env[6].value="http://localhost:8080/airflow-staging" airflow-staging airflow-eks-helm-chart/airflow
+                - sleep 30s
+                - export POD_NAME=$(kubectl get pods --namespace staging -l "component=webserver,release=airflow-staging" -o jsonpath="{.items[0].metadata.name}")
+                - kubectl exec $POD_NAME -n staging -- /bin/bash -c "pytest integrationtests"
+
+            post_build:
+              commands:
+                - echo Build completed on `date`
+                - echo "Pushing Docker image to ECR"
+                - docker push "${REPOSITORY_URI}:latest"
+                - docker push "${REPOSITORY_URI}:${TAG}"
+                - printf '{"Tag":"%s","RepositoryUri":"%s"}' $TAG $REPOSITORY_URI $PROJECT_NAME $ARTIFACT_BUCKET > build.json
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Type: LINUX_CONTAINER
+        Image: "aws/codebuild/standard:2.0"
+        PrivilegedMode: True
+        EnvironmentVariables:
+          - Name: AWS_DEFAULT_REGION
+            Value: !Ref AWS::Region
+          - Name: REPOSITORY_URI
+            Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrDockerRepository}
+          - Name: EKS_KUBECTL_ROLE_ARN
+            Value: !Sub arn:aws:iam::${AWS::AccountId}:role/${KubectlRoleName}
+          - Name: EKS_CLUSTER_NAME
+            Value: !Ref EksClusterName
+      Name: !Ref AWS::StackName
+      ServiceRole: !Sub arn:aws:iam::${AWS::AccountId}:role/AirflowCodeBuildServiceRole
+
+  CodePipelineGitHub:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/AirflowCodePipelineServiceRole
+      ArtifactStore:
+        Type: S3
+        Location: !Sub airflow-staging-codepipeline-artifacts
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: App
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Version: 1
+                Provider: GitHub
+              Configuration:
+                Owner: !Ref GitHubUser
+                Repo: !Ref GitSourceRepo
+                Branch: !Ref GitBranch
+                OAuthToken: !Ref GitHubToken
+              OutputArtifacts:
+                - Name: App
+              RunOrder: 1
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref CodeBuildProject
+              InputArtifacts:
+                - Name: App
+              OutputArtifacts:
+                - Name: BuildOutput
+              RunOrder: 1
+    DependsOn: CodeBuildProject

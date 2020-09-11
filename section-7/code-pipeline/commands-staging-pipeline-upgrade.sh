@@ -1,5 +1,7 @@
+# THIS IS THE UPGRADE VERSION OF THE CICD PIPELINE IN STAGING
+
 # Path to the template
-TEMPLATE=file://airflow-materials-aws/section-7/code-pipeline/airflow-staging-pipeline.cfn.yml
+TEMPLATE=file://airflow-materials-aws/section-7/code-pipeline/airflow-staging-pipeline-upgrade.cfn.yml
 
 # Update the stack
 aws cloudformation update-stack --stack-name=airflow-staging-pipeline \

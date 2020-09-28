@@ -18,9 +18,14 @@ SCRIPT_CODE_PIPELINE_DEV=$MATERIALS/section-6/scripts/setup-codepipeline-dev.sh
 chmod a+x $SCRIPT_CODE_PIPELINE_DEV
 $SCRIPT_CODE_PIPELINE_DEV $GIT_USERNAME $GIT_TOKEN $S3_BUCKET_NAME_DEV
 
-SCRIPT_CODE_PIPELINE_STAGING=$MATERIALS/section-6/scripts/setup-codepipeline-staging.sh
+SCRIPT_CODE_PIPELINE_STAGING=$MATERIALS/section-7/scripts/setup-codepipeline-staging.sh
 chmod a+x $SCRIPT_CODE_PIPELINE_STAGING
 $SCRIPT_CODE_PIPELINE_STAGING $GIT_USERNAME $GIT_TOKEN $S3_BUCKET_NAME_STAGING
+
+# ----------------------------- IAM for ingresses
+SCRIPT_SETUP_INGRESS=$MATERIALS/section-7/scripts/setup-ingress.sh
+chmod a+x $SCRIPT_SETUP_INGRESS
+$SCRIPT_SETUP_INGRESS
 
 # ----------------------------- Install Flux
 # Install Flux and synchronize the git repo with all manifests in kubernetes

@@ -11,16 +11,14 @@ source .sandbox/bin/activate
 pip install --upgrade pip
 
 # Download and extract the latest release of eksctl with the following command.
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/0.23.0/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-
-# Move the extracted binary to /usr/local/bin.
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
 
 # Test that your installation was successful with the following command.
 eksctl version
 
 # Download the latest release of Kubectl with the command 
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/linux/amd64/kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.24.8/bin/linux/amd64/kubectl
 
 # Make the kubectl binary executable.
 chmod +x ./kubectl

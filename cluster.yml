@@ -3,8 +3,7 @@ kind: ClusterConfig
 
 metadata:
   name: airflow
-  region: eu-west-3
-  version: "1.16"
+  region: us-east-1
 
 managedNodeGroups:
   - name: workers

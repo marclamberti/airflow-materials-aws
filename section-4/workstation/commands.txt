@@ -77,6 +77,9 @@ ssh-keygen -t rsa
 
 cd airflow-materials-aws
 
+# Install the key
+aws ec2 import-key-pair --key-name "airflow-workstation" --public-key-material fileb:///home/ec2-user/.ssh/id_rsa.pub
+
 # Create the cluster
 eksctl create cluster -f cluster.yml
 

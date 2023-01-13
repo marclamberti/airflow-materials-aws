@@ -86,33 +86,11 @@ kubectl get pods --all-namespaces
 
 ################################# EOV
 
-# Installing Flux
-# create the flux Kubernetes namespace
-kubectl create namespace flux
+curl -s https://fluxcd.io/install.sh | sudo bash
 
-# add the Flux chart repository to Helm and install Flux.
-helm repo add fluxcd https://charts.fluxcd.io
-
-helm upgrade -i flux fluxcd/flux \
---set git.url=git@github.com:marclamberti/airflow-eks-config \
---namespace flux
-
-helm upgrade -i helm-operator fluxcd/helm-operator --wait \
---namespace flux \
---set git.ssh.secretName=flux-git-deploy \
---set git.pollInterval=1m \
---set chartsSyncInterval=1m \
---set helm.versions=v3
-
-# Check the install. 3 pods should be running
-kubectl get pods -n flux
-
-# Install fluxctl in order to get the SSH key to allow GitHub write access. This allows Flux to keep the configuration in GitHub in sync with the configuration deployed in the cluster.
-sudo wget -O /usr/local/bin/fluxctl https://github.com/fluxcd/flux/releases/download/1.19.0/fluxctl_linux_amd64
-sudo chmod 755 /usr/local/bin/fluxctl
-
-fluxctl version
-fluxctl identity --k8s-fwd-ns flux
+flux bootstrap git \
+  --url=ssh://git@github.com:marclamberti/airflow-eks-config.git \
+  --branch=main
 
 mkdir airflow-eks-config/{workloads,releases,namespaces}
 find airflow-eks-config/ -type d -exec touch {}/.keep \;

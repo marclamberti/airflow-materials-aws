@@ -83,6 +83,11 @@ aws ec2 import-key-pair --key-name "airflow-workstation" --public-key-material f
 # Create the cluster
 eksctl create cluster -f cluster.yml
 
+# Install AWS V2
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install --update
+
 # Check if the cluster is healthy
 kubectl get nodes
 kubectl get pods --all-namespaces

@@ -104,10 +104,12 @@ kubectl get pods --all-namespaces
 
 curl -s https://fluxcd.io/install.sh | sudo bash
 
-flux bootstrap git \
-  --url=ssh://git@github.com:marclamberti/airflow-eks-config.git \
+flux bootstrap github \
+  --owner=marclamberti \
+  --repository=airflow-eks-config \
   --branch=main \
-  --interval=15s
+  --interval=15s \
+  --personal
 
 mkdir airflow-eks-config/{workloads,releases,namespaces}
 find airflow-eks-config/ -type d -exec touch {}/.keep \;

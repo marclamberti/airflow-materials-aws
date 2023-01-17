@@ -107,6 +107,7 @@ curl -s https://fluxcd.io/install.sh | sudo bash
 flux bootstrap git \
   --url=ssh://git@github.com:marclamberti/airflow-eks-config.git \
   --branch=main
+  --interval=15s
 
 mkdir airflow-eks-config/{workloads,releases,namespaces}
 find airflow-eks-config/ -type d -exec touch {}/.keep \;

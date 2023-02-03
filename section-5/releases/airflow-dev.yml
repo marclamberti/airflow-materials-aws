@@ -1,24 +1,35 @@
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: airflow
   namespace: dev
-  annotations:
-    flux.weave.works/automated: "true"
 spec:
+  interval: 30s
   releaseName: airflow-dev
   chart:
-    repository: https://marclamberti.github.io/airflow-eks-helm-chart
-    name: airflow
-    version: 1.0.0
+    spec:
+      chart: airflow
+      version: "1.7.0"
+      sourceRef:
+        kind: HelmRepository
+        name: apache-airflow
+        namespace: flux-system
   values:
+    defaultAirflowTag: "2.5.1"
+    airflowVersion: "2.5.1"
     fernetKey: "zTxhk7FuGqQVPZVoukLn5bGWOrgHzhQnBnaqAItcZGI="
     env:
-      AIRFLOW__KUBERNETES__DAGS_IN_IMAGE: "True"
-      AIRFLOW__KUBERNETES__NAMESPACE: "dev"
-      AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY: "apache/airflow"
-      AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG: "1.10.10.1-alpha2-python3.7"
-      AIRFLOW__KUBERNETES__RUN_AS_USER: "50000"
-      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      - name: "AIRFLOW__CORE__LOAD_EXAMPLES"
+        value: "False"
+      - name: "AIRFLOW__KUBERNETES_EXECUTOR__NAMESPACE"
+        value: "dev"
+      - name: "AIRFLOW__KUBERNETES_EXECUTOR__WORKER_CONTAINER_REPOSITORY"
+        value: "apache/airflow"
+      - name: "AIRFLOW__KUBERNETES_EXECUTOR__WORKER_CONTAINER_TAG"
+        value: "slim-2.5.1-python3.8"
     executor: "KubernetesExecutor"
+    createUserJob:
+      useHelmHooks: false
+    migrateDatabaseJob:
+      useHelmHooks: false
     
